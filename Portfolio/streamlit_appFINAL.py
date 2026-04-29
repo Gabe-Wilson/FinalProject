@@ -37,7 +37,7 @@ if SRC_DIR not in sys.path:
 from Custom_Classes import FeatureSelector, AutoPowerTransformer  # noqa: F401
 
 # ── SageMaker endpoint (update name if yours differs) ──────────────────────
-ENDPOINT_NAME = "fraud-rf-json-endpoint"
+ENDPOINT_NAME = st.secrets["aws_credentials"]["AWS_ENDPOINT"]
 
 # ── Local artefact paths (relative to this file's directory = Portfolio/) ──
 PORTFOLIO_DIR  = os.path.dirname(os.path.abspath(__file__))
@@ -101,7 +101,13 @@ if st.button("🔎 Predict"):
     try:
         import boto3, json
 
-        runtime = boto3.client("sagemaker-runtime")
+        runtime = boto3.client(
+            "sagemaker-runtime",
+            region_name=st.secrets["aws_credentials"]["AWS_DEFAULT_REGION"],
+            aws_access_key_id=st.secrets["aws_credentials"]["AWS_ACCESS_KEY_ID"],
+            aws_secret_access_key=st.secrets["aws_credentials"]["AWS_SECRET_ACCESS_KEY"],
+            aws_session_token=st.secrets["aws_credentials"]["AWS_SESSION_TOKEN"],
+        )
         payload = input_df.to_json(orient="columns")   # same as JSONSerializer
 
         response = runtime.invoke_endpoint(

@@ -1,0 +1,13 @@
+# requirements.txt — place in the repo root (same level as Portfolio/ and src/)
+streamlit
+pandas
+numpy
+joblib
+shap
+matplotlib
+boto3
+sagemaker
+scikit-learn
+imbalanced-learn
+scipy
+statsmodels

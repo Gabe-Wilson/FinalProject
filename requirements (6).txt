@@ -11,3 +11,4 @@ scikit-learn
 imbalanced-learn
 scipy
 statsmodels
+gensim

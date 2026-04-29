@@ -44,13 +44,8 @@ PORTFOLIO_DIR  = os.path.dirname(os.path.abspath(__file__))
 PIPELINE_PATH  = os.path.join(PORTFOLIO_DIR, "finalized_fraud_model.joblib")
 X_TRAIN_PATH   = os.path.join(PORTFOLIO_DIR, "X_train.csv")
 
-# ── The 4 post-pipeline feature columns expected by the endpoint ────────────
-FEATURE_COLS = [
-    "cat__card6_credit",
-    "remainder__V317",
-    "cat__card6_debit",
-    "remainder__V312",
-]
+# ── The 3 raw feature columns sent to the endpoint ─────────────────────────
+FEATURE_COLS = ["card6", "V317", "V312"]
 
 # ───────────────────────────────────────────────────────────────────────────
 # Page config
@@ -60,33 +55,28 @@ st.title("🔍 IEEE-CIS Fraud Detection — Real-Time Inference")
 st.markdown("Adjust the feature values in the sidebar, then click **Predict**.")
 
 # ───────────────────────────────────────────────────────────────────────────
-# Sidebar — user inputs for the 4 features
+# Sidebar — user inputs for the 3 features
 # ───────────────────────────────────────────────────────────────────────────
 st.sidebar.header("Transaction Features")
 
-card6_credit = st.sidebar.slider(
-    "cat__card6_credit  (one-hot: 1 = credit card)",
-    min_value=0.0, max_value=1.0, value=1.0, step=1.0
+card6 = st.sidebar.selectbox(
+    "card6 (card type)",
+    ["credit", "debit"]
 )
 v317 = st.sidebar.number_input(
-    "remainder__V317",
+    "V317",
     value=0.0, format="%.4f"
 )
-card6_debit = st.sidebar.slider(
-    "cat__card6_debit  (one-hot: 1 = debit card)",
-    min_value=0.0, max_value=1.0, value=0.0, step=1.0
-)
 v312 = st.sidebar.number_input(
-    "remainder__V312",
+    "V312",
     value=0.0, format="%.4f"
 )
 
 # Build a single-row DataFrame with the correct column names
 input_df = pd.DataFrame([{
-    "cat__card6_credit": card6_credit,
-    "remainder__V317":   v317,
-    "cat__card6_debit":  card6_debit,
-    "remainder__V312":   v312,
+    "card6": card6,
+    "V317":  v317,
+    "V312":  v312,
 }])
 
 st.write("### Input Features")
